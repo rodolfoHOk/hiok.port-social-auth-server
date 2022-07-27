@@ -51,4 +51,8 @@
 
   - CorsConfig.java
 
-7. 
+7. Criar as entidades do banco de dados
+
+  - User.java
+  - AuthProvider.java
+
