@@ -41,5 +41,10 @@
 
   - Configurar o banco de dados
   - Configurar o security oauth2 client
+  - Configurar propriedades customizadas da aplicação
 
-5. 
+5. Vincular as propriedades customizadas da aplicação a uma classe
+
+  - AppProperties.java
+
+
