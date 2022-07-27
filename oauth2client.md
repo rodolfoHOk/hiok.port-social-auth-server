@@ -47,4 +47,8 @@
 
   - AppProperties.java
 
+6. Habilitando CORS
 
+  - CorsConfig.java
+
+7. 
