@@ -15,10 +15,10 @@
 
 - Spring Security OAuth2 Client
 - Spring Data JPA
-- Spring DevTools
 - PostgreSQL Driver
 - Flyway Migration
 - Lombok
+- Spring DevTools
 
 ## 📖 Guias 📃
 
