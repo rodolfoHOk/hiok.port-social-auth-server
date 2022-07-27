@@ -56,3 +56,8 @@
   - User.java
   - AuthProvider.java
 
+8. Criar o repositório de usuário com Spring Data JPA
+
+  - UserRepository.java
+
+9. 
