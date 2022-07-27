@@ -5,6 +5,10 @@ import java.util.List;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
 
@@ -12,64 +16,29 @@ public class AppProperties {
   private final Cors cors = new Cors();
   private final OAuth2 oauth2 = new OAuth2();
 
-  public Auth getAuth() {
-    return auth;
-  }
-
-  public Cors getCors() {
-    return cors;
-  }
-
-  public OAuth2 getOauth2() {
-    return oauth2;
-  }
-
+  @Getter
+  @Setter
   public static class Auth {
 
     private String tokenSecret;
     private long tokenExpiration;
    
-    public String getTokenSecret() {
-      return tokenSecret;
-    }
-
-    public void setTokenSecret(String tokenSecret) {
-      this.tokenSecret = tokenSecret;
-    }
-
-    public long getTokenExpiration() {
-      return tokenExpiration;
-    }
-
-    public void setTokenExpiration(long tokenExpiration) {
-      this.tokenExpiration = tokenExpiration;
-    }
   }
 
+  @Getter
+  @Setter
   public static class Cors {
 
     private List<String> allowedOrigins = new ArrayList<>();
 
-    public List<String> getAllowedOrigins() {
-      return allowedOrigins;
-    }
-
-    public void setAllowedOrigins(List<String> allowedOrigins) {
-      this.allowedOrigins = allowedOrigins;
-    }
   }
 
+  @Getter
+  @Setter
   public static class OAuth2 {
 
     private List<String> authorizedRedirectUris = new ArrayList<>();
 
-    public List<String> getAuthorizedRedirectUris() {
-      return authorizedRedirectUris;
-    }
-
-    public void setAuthorizedRedirectUris(List<String> authorizedRedirectUris) {
-      this.authorizedRedirectUris = authorizedRedirectUris;
-    }
   }
   
 }
