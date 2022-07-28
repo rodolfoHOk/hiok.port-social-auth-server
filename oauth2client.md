@@ -79,26 +79,27 @@
 
   6. Finalmente, o oAuth2AuthenticationSuccessHandler é invocado. Ele cria um token de autenticação JWT para o usuário e envia o usuário para o redirect_uri junto com o token JWT em uma query string. 
 
-#### Oauth2 Authorization Request Repository Customizado
+#### Implementar um Oauth2 Authorization Request Repository Customizado
 
   - Configurar o Authorization Request Repository para armazenar os parâmetros state e redirect_uri em um cookie de curta duração: CustomOauth2AuthorizationRequestRepository.java
 
-#### OAuth2 User Service Customizado
+#### Implementar Mapeamentos OAuth2 User Info para Google, Facebook e Github
+
+  - Cada provedor OAuth2 retorna uma resposta JSON diferente quando buscamos os detalhes do usuário autenticado. O Spring Security analisa a resposta na forma de um Map genérico de pares chave-valor. Mapearemos os pares chave valor para obter os dados do usuário que precisamos para cada um dos provedores.
+
+#### Implementar um OAuth2 User Service Customizado
+
+  - Esse método é chamado depois que um token de acesso é obtido do provedor OAuth2. 
+  Nesse método, primeiro buscamos os detalhes do usuário no provedor OAuth2. Se já existe um usuário com o mesmo e-mail em nosso banco de dados, atualizamos seus dados, caso contrário, registramos um novo usuário. CustomOAuth2UserService.java
+
+#### Implementar o OAuth2 Authentication Success Handler
 
   - 
 
-#### Mapeando OAuth2 User Info para Google, Facebook e Github
+#### Implementar o OAuth2 Authentication Failure Handler
 
   - 
 
-#### OAuth2 Authentication Success Handler
-
-  - 
-
-#### OAuth2 Authentication Failure Handler
-
-  - 
-
-#### Security Config
+#### Implementar o Security Config
 
   - 
