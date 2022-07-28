@@ -7,8 +7,6 @@ import org.springframework.security.oauth2.client.web.AuthorizationRequestReposi
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
 
-import com.nimbusds.oauth2.sdk.util.StringUtils;
-
 import dev.hiok.portfoliosocialauthserver.core.utils.CookieUtils;
 
 @Component
@@ -43,7 +41,7 @@ public class CustomOAuth2AuthorizationRequestRepository implements Authorization
       CookieUtils.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
     
     String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
-    if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
+    if (!redirectUriAfterLogin.isBlank()) {
       CookieUtils.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, 
         redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
     }

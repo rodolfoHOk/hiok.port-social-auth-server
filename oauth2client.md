@@ -98,7 +98,7 @@
 
 #### Implementar o OAuth2 Authentication Failure Handler
 
-  - 
+  - Obs: Lançar uma instância de AuthenticationException acionará o OAuth2AuthenticationFailureHandler
 
 #### Implementar o Security Config
 
