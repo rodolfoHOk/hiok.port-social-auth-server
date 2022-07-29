@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.hiok.portfoliosocialauthserver.core.config.AppProperties;
@@ -18,6 +19,7 @@ import dev.hiok.portfoliosocialauthserver.core.security.TokenProvider;
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.exception.AuthBadRequestException;
 import dev.hiok.portfoliosocialauthserver.core.utils.CookieUtils;
 
+@Component
 public class Oauth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   
   @Autowired

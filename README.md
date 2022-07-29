@@ -11,8 +11,9 @@
 - Banco de dados : PostgreSQL
 - Autenticação : Oauth2
 
-### 📚 Bibliotecas adicionais 🗃️
+### 📚 Bibliotecas utilizadas 🗃️
 
+- Spring WEB
 - Spring Security OAuth2 Client
 - Spring Data JPA
 - PostgreSQL Driver
@@ -27,5 +28,9 @@
 [JKS](jks.md)
 
 ## 🔗 Links úteis ✨
+
+https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+
+https://connect2id.com/products/nimbus-jose-jwt
 
 ## Próximos passos:

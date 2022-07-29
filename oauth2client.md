@@ -98,8 +98,8 @@
 
 #### Implementar o OAuth2 Authentication Failure Handler
 
-  - Em caso de erro durante a autenticação OAuth2, o Spring Security invoca o método onAuthenticationFailure() do OAuth2 authentication failure handler configurado no SecurityConfig. Obs: Ao lançar uma instância de AuthenticationException acionará o OAuth2AuthenticationFailureHandler
+  - Em caso de erro durante a autenticação OAuth2, o Spring Security invoca o método onAuthenticationFailure() do OAuth2 authentication failure handler configurado no SecurityConfig. Obs: Ao lançar uma instância de AuthenticationException acionará o OAuth2AuthenticationFailureHandler.
 
 #### Implementar o Security Config
 
-  - 
+  - A classe SecurityConfig a seguir é o ponto crucial de nossa implementação de segurança. Ele contém configurações para o login social OAuth2.
