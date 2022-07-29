@@ -24,6 +24,8 @@
 
 [Oauth2 Client](oauth2client.md)
 
+[JKS](jks.md)
+
 ## 🔗 Links úteis ✨
 
 ## Próximos passos:

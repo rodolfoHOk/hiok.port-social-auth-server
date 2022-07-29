@@ -94,7 +94,7 @@
 
 #### Implementar o OAuth2 Authentication Success Handler
 
-  - 
+  - Na autenticação bem-sucedida, o Spring invoca o método onAuthenticationSuccess() com o OAuth2AuthenticationSuccessHandler configurado no SecurityConfig. Nesse método, realizamos algumas validações, criamos um token de autenticação JWT e redirecionamos o usuário para o redirect_uri especificado pelo cliente com o token JWT adicionado na query string.
 
 #### Implementar o OAuth2 Authentication Failure Handler
 

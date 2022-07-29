@@ -20,7 +20,9 @@ public class AppProperties {
   @Setter
   public static class Auth {
 
-    private String tokenSecret;
+    private String jwtBase64Jks;
+    private String jwtJksPassword;
+    private String jwtJksAlias;
     private long tokenExpiration;
    
   }
