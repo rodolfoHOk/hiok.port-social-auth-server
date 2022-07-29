@@ -15,8 +15,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.hiok.portfoliosocialauthserver.core.config.AppProperties;
 import dev.hiok.portfoliosocialauthserver.core.security.TokenProvider;
+import dev.hiok.portfoliosocialauthserver.core.security.oauth2.exception.AuthBadRequestException;
 import dev.hiok.portfoliosocialauthserver.core.utils.CookieUtils;
-import dev.hiok.portfoliosocialauthserver.domain.exception.BadRequestException;
 
 public class Oauth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   
@@ -38,7 +38,7 @@ public class Oauth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         .map(Cookie::getValue).orElse(getDefaultTargetUrl());
 
     if (!isAuthorizedRedirectUri(redirectUri)) {
-      throw new BadRequestException(
+      throw new AuthBadRequestException(
         "Unauthorized Redirect URI and can't proceed with the authentication");
     }
 
