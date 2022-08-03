@@ -21,7 +21,6 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -95,16 +94,11 @@ public class TokenProvider {
     try {
       byte[] jks = Base64.getDecoder().decode(appProperties.getAuth().getJwtBase64Jks());
       char[] jksPassword = appProperties.getAuth().getJwtJksPassword().toCharArray();
+      String jksAlias = appProperties.getAuth().getJwtJksAlias();
       KeyStore keyStore = KeyStore.getInstance("JKS");
       keyStore.load(new ByteArrayInputStream(jks), jksPassword);
-      JWKSet jwkSet = JWKSet.load(keyStore, null);
-      RSAKey rsaKey = (RSAKey) jwkSet.getKeys().get(0);
-      if (rsaKey.isPrivate()) {
-        return rsaKey;
-      } else {
-        throw new TokenProcessingException("Key store not contains a private key");
-      }
-    } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException e) {
+      return RSAKey.load(keyStore, jksAlias, jksPassword);
+    } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | JOSEException e) {
       throw new TokenProcessingException("Get Private Key error: " + e.getMessage());
     }
   }
