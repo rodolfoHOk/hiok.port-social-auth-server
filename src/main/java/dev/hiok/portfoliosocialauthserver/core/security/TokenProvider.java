@@ -90,6 +90,10 @@ public class TokenProvider {
     }
   }
 
+  public RSAKey getPublicKey() {
+    return getPrivateKeyFromJKS().toPublicJWK();
+  }
+
   private RSAKey getPrivateKeyFromJKS() {
     try {
       byte[] jks = Base64.getDecoder().decode(appProperties.getAuth().getJwtBase64Jks());

@@ -2,9 +2,6 @@ package dev.hiok.portfoliosocialauthserver.core.security.oauth2.userInfo;
 
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
 
   public FacebookOAuth2UserInfo(Map<String, Object> attributes) {
