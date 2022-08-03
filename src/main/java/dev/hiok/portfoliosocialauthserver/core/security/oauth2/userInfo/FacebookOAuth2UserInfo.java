@@ -2,6 +2,9 @@ package dev.hiok.portfoliosocialauthserver.core.security.oauth2.userInfo;
 
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
 
   public FacebookOAuth2UserInfo(Map<String, Object> attributes) {
@@ -30,7 +33,7 @@ public class FacebookOAuth2UserInfo extends OAuth2UserInfo {
       Map<String, Object> pictureObject =  (Map<String, Object>) attributes.get("picture");
       if (pictureObject.containsKey("data")) {
         @SuppressWarnings("unchecked")
-        Map<String, Object> dataObject =  (Map<String, Object>) attributes.get("data");
+        Map<String, Object> dataObject = (Map<String, Object>) pictureObject.get("data");
         if (dataObject.containsKey("url")) {
           return (String) dataObject.get("url");
         }
