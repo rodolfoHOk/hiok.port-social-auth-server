@@ -20,6 +20,8 @@
 - Flyway Migration
 - Lombok
 - Spring DevTools
+- Spring Security Oauth2 Resource Server
+- Spring Security Oauth2 JOSE
 
 ## 📖 Guias 📃
 
@@ -33,6 +35,12 @@ https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigu
 
 https://connect2id.com/products/nimbus-jose-jwt
 
-## Próximos passos:
+https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
 
-- roles in token (auth server and resource server)
+## 🔥 Repositórios Relacionados 🫶
+
+- [Portfolio Social Login Server - Java Spring](https://github.com/rodolfoHOk/hiok.port-social-auth-server) (este repositório)
+
+- [Portfolio Social Login FrontEnd - React](https://github.com/rodolfoHOk/hiok.port-social-auth-react)
+
+- [Portfolio Resource Server - Java Spring](https://github.com/rodolfoHOk/hiok.port-resource-server)
