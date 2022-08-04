@@ -26,4 +26,12 @@ public class Role {
   @Column(nullable = false)
   private String description;
 
+  public static Role getRole(RoleType roleType) {
+    Role role = new Role();
+    role.setId(roleType.getId());
+    role.setName(roleType.getName());
+    role.setDescription(roleType.getDescription());
+    return role;
+  }
+
 }
