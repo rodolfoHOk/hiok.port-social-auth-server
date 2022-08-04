@@ -1,9 +1,9 @@
 package dev.hiok.portfoliosocialauthserver.core.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,9 +29,8 @@ public class UserPrincipal implements OAuth2User {
   }
 
   public static UserPrincipal create(User user, Map<String, Object> attributes) {
-    List<GrantedAuthority> authorities = new ArrayList<>();
-    user.getRoles().stream()
-      .forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+    List<GrantedAuthority> authorities = user.getRoles().stream()
+      .map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 
     return new UserPrincipal(attributes, authorities, user.getId(), user.getEmail());
   }

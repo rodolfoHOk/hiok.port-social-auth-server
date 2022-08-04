@@ -9,6 +9,8 @@ import java.security.cert.CertificateException;
 import java.text.ParseException;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -43,9 +45,13 @@ public class TokenProvider {
 
       Date now = new Date();
       Date expirationDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpiration());
+      List<String> authorities = userPrincipal.getAuthorities().stream()
+        .map(authority -> authority.getAuthority()).collect(Collectors.toList());
+      
       JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
         .subject(Long.toString(userPrincipal.getId()))
-        .issueTime(new Date())
+        .claim("authorities", authorities)
+        .issueTime(now)
         .expirationTime(expirationDate)
         .build();
 
