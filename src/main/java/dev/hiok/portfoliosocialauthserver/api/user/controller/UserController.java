@@ -3,6 +3,7 @@ package dev.hiok.portfoliosocialauthserver.api.user.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class UserController {
   @Autowired
   private TokenProvider tokenProvider;
 
+  @PreAuthorize("hasAuthority('ROLE_USER') and hasAuthority('SCOPE_READ')")
   @GetMapping("/me")
   public UserResponse getUserInfo(HttpServletRequest request) {
     String bearer = request.getHeader("Authorization");
