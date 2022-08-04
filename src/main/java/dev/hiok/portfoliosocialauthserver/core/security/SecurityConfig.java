@@ -1,18 +1,12 @@
 package dev.hiok.portfoliosocialauthserver.core.security;
 
-import java.security.interfaces.RSAPublicKey;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import com.nimbusds.jose.JOSEException;
 
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.CustomOAuth2AuthorizationRequestRepository;
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.CustomOAuth2UserService;
@@ -36,9 +30,6 @@ public class SecurityConfig {
   @Autowired
   private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
-  @Autowired
-  private TokenProvider tokenProvider;
-  
   @Bean
   @Order(1)
   public SecurityFilterChain authServerFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -90,12 +81,6 @@ public class SecurityConfig {
         .jwt();
 
     return httpSecurity.build();
-  }
-
-  @Bean
-  public JwtDecoder jwtDecoder() throws JOSEException {
-    RSAPublicKey publicKey = tokenProvider.getPublicKey().toRSAPublicKey();
-    return NimbusJwtDecoder.withPublicKey(publicKey).build();
   }
 
 }

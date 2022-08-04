@@ -34,3 +34,5 @@ https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigu
 https://connect2id.com/products/nimbus-jose-jwt
 
 ## Próximos passos:
+
+- roles in token (auth server and resource server)
