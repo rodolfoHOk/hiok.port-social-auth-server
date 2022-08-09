@@ -43,12 +43,12 @@ public class User {
   private String providerId;
 
   @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(name = "User_Roles", joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
-  private Set<Role> roles = new HashSet<>();
+  @JoinTable(name = "user_groups", joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<Group> groups = new HashSet<>();
 
-  public void addRole(Role role) {
-    roles.add(role);
+  public void addGroup(Group group) {
+	  groups.add(group);
   }
 
 }

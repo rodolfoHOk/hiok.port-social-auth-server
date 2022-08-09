@@ -14,8 +14,8 @@ import dev.hiok.portfoliosocialauthserver.core.security.oauth2.exception.OAuth2A
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.userInfo.OAuth2UserInfo;
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.userInfo.OAuth2UserInfoFactory;
 import dev.hiok.portfoliosocialauthserver.domain.model.AuthProvider;
-import dev.hiok.portfoliosocialauthserver.domain.model.Role;
-import dev.hiok.portfoliosocialauthserver.domain.model.RoleType;
+import dev.hiok.portfoliosocialauthserver.domain.model.CommonsGroup;
+import dev.hiok.portfoliosocialauthserver.domain.model.Group;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
 import dev.hiok.portfoliosocialauthserver.domain.repository.UserRepository;
 
@@ -61,8 +61,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setImageUrl(oAuth2UserInfo.getImageUrl());
     user.setProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()));
     user.setProviderId(oAuth2UserInfo.getId());
-    user.addRole(Role.getRole(RoleType.ROLE_USER));
-    user.addRole(Role.getRole(RoleType.SCOPE_READ));
+    user.addGroup(Group.getGroup(CommonsGroup.COMMON_USER));
 
     return userRepository.save(user);
   }

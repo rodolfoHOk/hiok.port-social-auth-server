@@ -7,6 +7,7 @@ public enum RoleType {
   
   ROLE_USER (1l, "ROLE_USER", "role user"),
   ROLE_ADMIN (2l, "ROLE_ADMIN", "role admin user"),
+  ROLE_CLIENT (5l, "ROLE_CLIENT", "role client user"),
   SCOPE_READ (3l, "SCOPE_READ", "scope read only"),
   SCOPE_WRITE (4l, "SCOPE_WRITE", "scope write only");
   
