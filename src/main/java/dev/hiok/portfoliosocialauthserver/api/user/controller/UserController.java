@@ -1,12 +1,15 @@
 package dev.hiok.portfoliosocialauthserver.api.user.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UserDetailsResponseAssembler;
@@ -43,6 +46,16 @@ public class UserController {
   public List<UserDetailsResponse> getAllUsers() {
 	  List<User> users = userRepository.findAll();
 	  return UserDetailsResponseAssembler.toCollectionModel(users);
+  }
+  
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
+  @GetMapping("/users/{id}")
+  public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable Long id) {
+	  Optional<User> user = userRepository.findById(id);
+	  if (user.isEmpty()) {
+		  return ResponseEntity.notFound().build();
+	  }
+	  return ResponseEntity.ok(UserDetailsResponseAssembler.toModel(user.get()));
   }
 
 }
