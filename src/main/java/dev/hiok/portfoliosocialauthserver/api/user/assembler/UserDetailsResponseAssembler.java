@@ -12,7 +12,7 @@ public class UserDetailsResponseAssembler {
 		userDetails.setEmail(user.getEmail());
 		userDetails.setImageUrl(user.getImageUrl());
 		userDetails.setProvider(user.getProvider());
-		userDetails.setGroups(user.getGroups());
+		userDetails.setGroups(GroupNameResponseAssembler.toCollectionModel(user.getGroups()));
 		return userDetails;
 	}
 	

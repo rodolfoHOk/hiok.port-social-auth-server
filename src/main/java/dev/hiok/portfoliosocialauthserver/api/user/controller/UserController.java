@@ -20,7 +20,7 @@ import dev.hiok.portfoliosocialauthserver.api.user.assembler.UserResponseAssembl
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UsersDetailsResponseAssembler;
 import dev.hiok.portfoliosocialauthserver.api.user.represention.UserDetailsResponse;
 import dev.hiok.portfoliosocialauthserver.api.user.represention.UserResponse;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UsersDetailsResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.represention.UsersResponse;
 import dev.hiok.portfoliosocialauthserver.core.security.TokenProvider;
 import dev.hiok.portfoliosocialauthserver.domain.exception.ResourceNotFoundException;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
@@ -48,7 +48,7 @@ public class UserController {
   
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users")
-  public UsersDetailsResponse getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
+  public UsersResponse getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
 	  Page<User> users = userRepository.findAll(pageable);
 	  return UsersDetailsResponseAssembler.toModel(users);
   }

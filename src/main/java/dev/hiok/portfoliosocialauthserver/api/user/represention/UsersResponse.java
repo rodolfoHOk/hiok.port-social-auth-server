@@ -7,11 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsersDetailsResponse {
+public class UsersResponse {
 
-	List<UserDetailsResponse> content;
-	
-	private Long totalElements;
+	List<UserResponse> content;
+
+	Long totalElements;
 	
 	private int totalPages;
 	

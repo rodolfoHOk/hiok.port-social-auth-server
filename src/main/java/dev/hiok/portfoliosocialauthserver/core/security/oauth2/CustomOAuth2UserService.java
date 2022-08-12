@@ -1,13 +1,18 @@
 package dev.hiok.portfoliosocialauthserver.core.security.oauth2;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.hiok.portfoliosocialauthserver.core.security.UserPrincipal;
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.exception.OAuth2AuthenticationProcessingException;
@@ -25,6 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Transactional(readOnly = true)
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     OAuth2User oAuth2User = super.loadUser(userRequest);
@@ -50,8 +56,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     } else {
       user = registerNewUser(userRequest, oAuth2UserInfo);
     }
-
-    return UserPrincipal.create(user, oAuth2User.getAttributes());
+    
+    return UserPrincipal.create(user, oAuth2User.getAttributes(), getAuthorities(user));
+  }
+  
+  private Collection<GrantedAuthority> getAuthorities(User user) {
+  	return user.getGroups().stream()
+  			.flatMap(group -> group.getRoles().stream()
+  				.map(role -> new SimpleGrantedAuthority(role.getName())))
+  			.collect(Collectors.toList());
   }
 
   private User registerNewUser(OAuth2UserRequest userRequest, OAuth2UserInfo oAuth2UserInfo) {
