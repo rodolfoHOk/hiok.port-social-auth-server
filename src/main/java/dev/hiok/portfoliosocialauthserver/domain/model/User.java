@@ -47,7 +47,11 @@ public class User {
   private Set<Group> groups = new HashSet<>();
 
   public void addGroup(Group group) {
-	  groups.add(group);
+	  getGroups().add(group);
+  }
+  
+  public void removeGroup(Group group) {
+  	getGroups().remove(group);
   }
 
 }

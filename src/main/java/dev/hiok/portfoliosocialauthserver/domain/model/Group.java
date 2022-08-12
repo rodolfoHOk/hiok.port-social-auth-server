@@ -38,7 +38,11 @@ public class Group {
 	private Set<Role> roles = new HashSet<>();
 	
 	public void addRole(Role role) {
-		roles.add(role);
+		getRoles().add(role);
+	}
+	
+	public void removeRole(Role role) {
+		getRoles().remove(role);
 	}
 	
 	public static Group getGroup(CommonsGroup commonGroup) {

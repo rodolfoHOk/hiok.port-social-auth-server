@@ -38,6 +38,8 @@ https://connect2id.com/products/nimbus-jose-jwt
 
 https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html
 
+https://www.rfc-editor.org/rfc/rfc7807.html
+
 ## 🔥 Repositórios Relacionados 🫶
 
 - [Portfolio Social Login Server - Java Spring](https://github.com/rodolfoHOk/hiok.port-social-auth-server) (este repositório)

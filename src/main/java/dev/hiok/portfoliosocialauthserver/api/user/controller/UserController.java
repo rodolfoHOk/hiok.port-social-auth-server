@@ -19,27 +19,26 @@ import dev.hiok.portfoliosocialauthserver.api.user.represention.UserDetailsRespo
 import dev.hiok.portfoliosocialauthserver.api.user.represention.UserResponse;
 import dev.hiok.portfoliosocialauthserver.api.user.represention.UsersResponse;
 import dev.hiok.portfoliosocialauthserver.core.security.TokenProvider;
-import dev.hiok.portfoliosocialauthserver.domain.exception.ResourceNotFoundException;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
 import dev.hiok.portfoliosocialauthserver.domain.repository.UserRepository;
+import dev.hiok.portfoliosocialauthserver.domain.service.UserRegistrationService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+  private final UserRegistrationService userRegistrationService;
+  private final TokenProvider tokenProvider;
 
-  @Autowired
-  private TokenProvider tokenProvider;
-
-  @PreAuthorize("hasAuthority('ROLE_USER') and hasAuthority('SCOPE_READ')")
+	@PreAuthorize("hasAuthority('ROLE_USER') and hasAuthority('SCOPE_READ')")
   @GetMapping("/user/me")
   public UserResponse getUserInfo(HttpServletRequest request) {
     String bearer = request.getHeader("Authorization");
     String token = bearer.substring(7);
     Long userId = tokenProvider.getUserIdFromToken(token);
-    User user = userRepository.findById(userId)
-      .orElseThrow(() -> new ResourceNotFoundException("Resource user info not found"));
+    User user = userRegistrationService.getById(userId);
     return UserResponseAssembler.toModel(user);
   }
   
@@ -53,18 +52,14 @@ public class UserController {
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/{id}")
   public UserDetailsResponse getUserById(@PathVariable Long id) {
-	  User user = userRepository.findById(id)
-	  		.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-	  
+	  User user = userRegistrationService.getById(id);
 	  return UserDetailsResponseAssembler.toModel(user);
   }
   
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/email")
   public UserDetailsResponse getUserByEmail(@RequestParam String email) {
-	  User user = userRepository.findByEmail(email)
-	  		.orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-	  
+	  User user = userRegistrationService.getByEmail(email);
 	  return UserDetailsResponseAssembler.toModel(user);
   }
 
