@@ -4,12 +4,12 @@ public class TokenProcessingException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  public TokenProcessingException(String arg0) {
-    super(arg0);
+  public TokenProcessingException(String message) {
+    super(message);
   }
 
-  public TokenProcessingException(String arg0, Throwable arg1) {
-    super(arg0, arg1);
+  public TokenProcessingException(String message, Throwable cause) {
+    super(message, cause);
   }
   
 }

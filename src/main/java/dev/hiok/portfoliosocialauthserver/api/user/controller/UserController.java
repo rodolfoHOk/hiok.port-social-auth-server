@@ -1,14 +1,11 @@
 package dev.hiok.portfoliosocialauthserver.api.user.controller;
 
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,22 +52,20 @@ public class UserController {
   
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/{id}")
-  public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable Long id) {
-	  Optional<User> user = userRepository.findById(id);
-	  if (user.isEmpty()) {
-		  return ResponseEntity.notFound().build();
-	  }
-	  return ResponseEntity.ok(UserDetailsResponseAssembler.toModel(user.get()));
+  public UserDetailsResponse getUserById(@PathVariable Long id) {
+	  User user = userRepository.findById(id)
+	  		.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+	  
+	  return UserDetailsResponseAssembler.toModel(user);
   }
   
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/email")
-  public ResponseEntity<UserDetailsResponse> getUserByEmail(@RequestParam String email) {
-	  Optional<User> user = userRepository.findByEmail(email);
-	  if (user.isEmpty()) {
-		  return ResponseEntity.notFound().build();
-	  }
-	  return ResponseEntity.ok(UserDetailsResponseAssembler.toModel(user.get()));
+  public UserDetailsResponse getUserByEmail(@RequestParam String email) {
+	  User user = userRepository.findByEmail(email)
+	  		.orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+	  
+	  return UserDetailsResponseAssembler.toModel(user);
   }
 
 }
