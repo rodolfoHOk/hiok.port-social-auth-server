@@ -10,12 +10,9 @@ import lombok.Setter;
 public class UsersResponse {
 
 	List<UserResponse> content;
-
-	Long totalElements;
-	
+	private Long totalElements;
 	private int totalPages;
-	
 	private int size;
-	
 	private int number;
+	
 }
