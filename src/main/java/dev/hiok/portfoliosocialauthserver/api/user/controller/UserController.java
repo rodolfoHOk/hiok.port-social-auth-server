@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UserDetailsResponseAssembler;
@@ -56,6 +57,16 @@ public class UserController {
   @GetMapping("/users/{id}")
   public ResponseEntity<UserDetailsResponse> getUserById(@PathVariable Long id) {
 	  Optional<User> user = userRepository.findById(id);
+	  if (user.isEmpty()) {
+		  return ResponseEntity.notFound().build();
+	  }
+	  return ResponseEntity.ok(UserDetailsResponseAssembler.toModel(user.get()));
+  }
+  
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
+  @GetMapping("/users/email")
+  public ResponseEntity<UserDetailsResponse> getUserByEmail(@RequestParam String email) {
+	  Optional<User> user = userRepository.findByEmail(email);
 	  if (user.isEmpty()) {
 		  return ResponseEntity.notFound().build();
 	  }
