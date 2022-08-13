@@ -11,7 +11,7 @@ import lombok.Setter;
 public class RoleInputRequest {
 	
 	@NotBlank
-	@Size(min = 6)
+	@Size(min = 6, max = 255)
 	private String name;
 	
 	@NotBlank

@@ -62,7 +62,8 @@ public class RoleController {
 	public RoleResponse updateRole(@PathVariable Long id, @RequestBody @Valid RoleInputRequest roleInput) {
 		Role existingRole = roleRegistrationService.getById(id);
 		RoleInputDisassembler.copyToEntity(existingRole, roleInput);
-		return RoleResponseAssembler.toModel(existingRole);
+		Role savedRole = roleRegistrationService.save(existingRole);
+		return RoleResponseAssembler.toModel(savedRole);
 	}
 	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
