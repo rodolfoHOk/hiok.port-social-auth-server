@@ -1,4 +1,4 @@
-package dev.hiok.portfoliosocialauthserver.api.user.represention.Input;
+package dev.hiok.portfoliosocialauthserver.api.user.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -15,6 +15,7 @@ public class RoleInputRequest {
 	private String name;
 	
 	@NotBlank
+	@Size(min = 3, max = 255)
 	private String description;
 	
 }

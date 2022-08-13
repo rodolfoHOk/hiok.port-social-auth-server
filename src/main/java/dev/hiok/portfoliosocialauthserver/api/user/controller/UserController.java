@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UserDetailsResponseAssembler;
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UserResponseAssembler;
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.UsersDetailsResponseAssembler;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UserDetailsResponse;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UserResponse;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UsersResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UserDetailsResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UserResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UsersResponse;
 import dev.hiok.portfoliosocialauthserver.core.security.TokenProvider;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
 import dev.hiok.portfoliosocialauthserver.domain.repository.UserRepository;
@@ -32,8 +32,8 @@ public class UserController {
   private final UserRegistrationService userRegistrationService;
   private final TokenProvider tokenProvider;
 
-	@PreAuthorize("hasAuthority('ROLE_USER') and hasAuthority('SCOPE_READ')")
   @GetMapping("/user/me")
+  @PreAuthorize("hasAuthority('ROLE_USER') and hasAuthority('SCOPE_READ')")
   public UserResponse getUserInfo(HttpServletRequest request) {
     String bearer = request.getHeader("Authorization");
     String token = bearer.substring(7);
@@ -42,22 +42,22 @@ public class UserController {
     return UserResponseAssembler.toModel(user);
   }
   
-  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   public UsersResponse getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
 	  Page<User> users = userRepository.findAll(pageable);
 	  return UsersDetailsResponseAssembler.toModel(users);
   }
   
-  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/{id}")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   public UserDetailsResponse getUserById(@PathVariable Long id) {
 	  User user = userRegistrationService.getById(id);
 	  return UserDetailsResponseAssembler.toModel(user);
   }
   
-  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   @GetMapping("/users/email")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
   public UserDetailsResponse getUserByEmail(@RequestParam String email) {
 	  User user = userRegistrationService.getByEmail(email);
 	  return UserDetailsResponseAssembler.toModel(user);

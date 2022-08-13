@@ -1,6 +1,6 @@
 package dev.hiok.portfoliosocialauthserver.api.user.assembler;
 
-import dev.hiok.portfoliosocialauthserver.api.user.represention.Input.RoleInputRequest;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.request.RoleInputRequest;
 import dev.hiok.portfoliosocialauthserver.domain.model.Role;
 
 public class RoleInputDisassembler {

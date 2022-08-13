@@ -3,7 +3,7 @@ package dev.hiok.portfoliosocialauthserver.api.user.assembler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import dev.hiok.portfoliosocialauthserver.api.user.represention.RoleResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.RoleResponse;
 import dev.hiok.portfoliosocialauthserver.domain.model.Role;
 
 public class RoleResponseAssembler {

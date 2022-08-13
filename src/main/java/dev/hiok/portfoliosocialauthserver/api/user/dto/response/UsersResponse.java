@@ -1,4 +1,4 @@
-package dev.hiok.portfoliosocialauthserver.api.user.represention;
+package dev.hiok.portfoliosocialauthserver.api.user.dto.response;
 
 import java.util.List;
 

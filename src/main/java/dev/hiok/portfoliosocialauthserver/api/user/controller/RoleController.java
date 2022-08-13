@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.RoleInputDisassembler;
 import dev.hiok.portfoliosocialauthserver.api.user.assembler.RoleResponseAssembler;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.RoleResponse;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.Input.RoleInputRequest;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.request.RoleInputRequest;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.RoleResponse;
 import dev.hiok.portfoliosocialauthserver.domain.model.Role;
 import dev.hiok.portfoliosocialauthserver.domain.repository.RoleRepository;
 import dev.hiok.portfoliosocialauthserver.domain.service.RoleRegistrationService;
@@ -34,41 +34,41 @@ public class RoleController {
 	private final RoleRepository roleRepository;
 	private final RoleRegistrationService roleRegistrationService;
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	public List<RoleResponse> getAllRoles() {
 		List<Role> roles = roleRepository.findAll();
 		return RoleResponseAssembler.toCollectionModel(roles);
 	}
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	public RoleResponse getRoleById(@PathVariable Long id) {
 		Role role = roleRegistrationService.getById(id);
 		return RoleResponseAssembler.toModel(role);
 	}
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	public RoleResponse createRole(@RequestBody @Valid RoleInputRequest roleInput) {
 		Role newRole = RoleInputDisassembler.toEntity(roleInput);
 		Role savedRole = roleRegistrationService.save(newRole);
 		return RoleResponseAssembler.toModel(savedRole);
 	}
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@PutMapping("/{id}")
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	public RoleResponse updateRole(@PathVariable Long id, @RequestBody @Valid RoleInputRequest roleInput) {
 		Role existingRole = roleRegistrationService.getById(id);
 		RoleInputDisassembler.copyToEntity(existingRole, roleInput);
-		Role savedRole = roleRegistrationService.save(existingRole);
-		return RoleResponseAssembler.toModel(savedRole);
+		Role updatedRole = roleRegistrationService.save(existingRole);
+		return RoleResponseAssembler.toModel(updatedRole);
 	}
 	
-	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	public void removeRole(@PathVariable Long id) {
 		roleRegistrationService.remove(id);
 	}

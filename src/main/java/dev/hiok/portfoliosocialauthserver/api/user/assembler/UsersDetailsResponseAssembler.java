@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UserResponse;
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UsersResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UserResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UsersResponse;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
 
 public class UsersDetailsResponseAssembler {

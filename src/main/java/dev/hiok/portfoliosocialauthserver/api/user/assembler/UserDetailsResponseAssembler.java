@@ -1,6 +1,6 @@
 package dev.hiok.portfoliosocialauthserver.api.user.assembler;
 
-import dev.hiok.portfoliosocialauthserver.api.user.represention.UserDetailsResponse;
+import dev.hiok.portfoliosocialauthserver.api.user.dto.response.UserDetailsResponse;
 import dev.hiok.portfoliosocialauthserver.domain.model.User;
 
 public class UserDetailsResponseAssembler {
