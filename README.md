@@ -23,6 +23,7 @@
 - Spring Security Oauth2 Resource Server
 - Spring Security Oauth2 JOSE
 - Apache Commons Lang3
+- Spring Validation
 
 ## 📖 Guias 📃
 

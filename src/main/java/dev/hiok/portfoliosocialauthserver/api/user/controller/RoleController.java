@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,18 +34,21 @@ public class RoleController {
 	private final RoleRepository roleRepository;
 	private final RoleRegistrationService roleRegistrationService;
 	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	@GetMapping
 	public List<RoleResponse> getAllRoles() {
 		List<Role> roles = roleRepository.findAll();
 		return RoleResponseAssembler.toCollectionModel(roles);
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
 	@GetMapping("/{id}")
 	public RoleResponse getRoleById(@PathVariable Long id) {
 		Role role = roleRegistrationService.getById(id);
 		return RoleResponseAssembler.toModel(role);
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public RoleResponse createRole(@RequestBody @Valid RoleInputRequest roleInput) {
@@ -53,6 +57,7 @@ public class RoleController {
 		return RoleResponseAssembler.toModel(savedRole);
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@PutMapping("/{id}")
 	public RoleResponse updateRole(@PathVariable Long id, @RequestBody @Valid RoleInputRequest roleInput) {
 		Role existingRole = roleRegistrationService.getById(id);
@@ -60,7 +65,7 @@ public class RoleController {
 		return RoleResponseAssembler.toModel(existingRole);
 	}
 	
-	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void removeRole(@PathVariable Long id) {

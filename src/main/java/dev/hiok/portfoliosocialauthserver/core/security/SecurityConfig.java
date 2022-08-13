@@ -78,6 +78,8 @@ public class SecurityConfig {
       .requestMatchers()
         .antMatchers("/user/**")
         .antMatchers("/users/**")
+        .antMatchers("/groups/**")
+        .antMatchers("/roles/**")
         .and()
       .authorizeRequests()
         .anyRequest().authenticated()
