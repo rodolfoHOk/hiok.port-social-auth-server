@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -47,9 +47,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-      HttpStatus status, WebRequest request) {
+                                                           HttpStatusCode status, WebRequest request) {
     if (body == null) {
-      body = createProblemDetails(ProblemType.SYSTEM_ERROR, status, status.getReasonPhrase());
+      body = createProblemDetails(ProblemType.SYSTEM_ERROR, status, HttpStatus.valueOf(status.value()).getReasonPhrase());
     } else if (body instanceof String) {
       body = createProblemDetails(ProblemType.SYSTEM_ERROR, status, (String) body);
     }
@@ -116,15 +116,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-      HttpStatus status, WebRequest request) {
-    var body = createProblemDetailsWithInvalidParams(ex.getBindingResult(), status);
-
-    return handleExceptionInternal(ex, body, headers, status, request);
-  }
-
-  @Override
-  protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
-      WebRequest request) {
+                                                                HttpStatusCode status, WebRequest request) {
     var body = createProblemDetailsWithInvalidParams(ex.getBindingResult(), status);
 
     return handleExceptionInternal(ex, body, headers, status, request);
@@ -132,7 +124,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
-      HttpStatus status, WebRequest request) {
+                                                                 HttpStatusCode status, WebRequest request) {
     String detail = String.format("Resource %s not exist", ex.getRequestURL());
     var body = createProblemDetails(ProblemType.RESOURCE_NOT_FOUND, status, detail);  
       
@@ -141,7 +133,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatus status, WebRequest request) {
+                                                        HttpStatusCode status, WebRequest request) {
 		if (ex instanceof MethodArgumentTypeMismatchException) {
 			String detail = String.format(
 				"The informed url parameter '%s' is not of the expected type %s.",
@@ -157,7 +149,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		String detail = "The request body is invalid. Verify syntax error";
 		
@@ -181,7 +173,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
-      HttpHeaders headers, HttpStatus status, WebRequest request) {
+      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     var body = createProblemDetails(ProblemType.UNSUPPORTED_MEDIA_TYPE, status, ex.getMessage());
         
     return handleExceptionInternal(ex, body, headers, status, request);
@@ -189,12 +181,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleHttpMediaTypeNotAcceptable(HttpMediaTypeNotAcceptableException ex,
-      HttpHeaders headers, HttpStatus status, WebRequest request) {
+      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     
     return ResponseEntity.status(status).headers(headers).build();
   }
 
-  private ProblemDetails createProblemDetails(ProblemType problemType, HttpStatus status, String detail) {
+  private ProblemDetails createProblemDetails(ProblemType problemType, HttpStatusCode status, String detail) {
     return ProblemDetails.builder()
       .type(problemType.getType())
       .title(problemType.getTitle())
@@ -204,7 +196,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
       .build();
   }
 
-  private ProblemDetails createProblemDetailsWithInvalidParams(BindingResult bindingResult, HttpStatus status) {
+  private ProblemDetails createProblemDetailsWithInvalidParams(BindingResult bindingResult, HttpStatusCode status) {
     ProblemType problemType = ProblemType.INVALID_DATA;
     String detail = "One or more fields are invalid";
 

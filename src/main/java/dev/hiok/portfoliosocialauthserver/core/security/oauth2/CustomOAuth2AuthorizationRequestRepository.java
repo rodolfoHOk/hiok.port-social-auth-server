@@ -1,7 +1,7 @@
 package dev.hiok.portfoliosocialauthserver.core.security.oauth2;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -24,7 +24,7 @@ public class CustomOAuth2AuthorizationRequestRepository implements Authorization
   }
 
   @Override
-  public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request) {
+  public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest request, HttpServletResponse response) {
     return this.loadAuthorizationRequest(request);
   }
 

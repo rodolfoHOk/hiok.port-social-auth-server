@@ -3,8 +3,7 @@ package dev.hiok.portfoliosocialauthserver.core.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -16,10 +15,9 @@ import dev.hiok.portfoliosocialauthserver.core.security.oauth2.CustomOAuth2UserS
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.OAuth2AuthenticationFailureHandler;
 import dev.hiok.portfoliosocialauthserver.core.security.oauth2.Oauth2AuthenticationSuccessHandler;
 
-
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
   @Autowired
@@ -35,7 +33,6 @@ public class SecurityConfig {
   private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
   @Bean
-  @Order(1)
   public SecurityFilterChain authServerFilterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity
       .cors().and()
@@ -43,15 +40,9 @@ public class SecurityConfig {
       .exceptionHandling()
         .authenticationEntryPoint(new RestAuthenticationEntryPoint())
         .and()
-      .requestMatchers()
-        .antMatchers("/oauth2/**")
-        .antMatchers("/.well-known/jwks.json")
-        .and()
-      .authorizeRequests()
-        .antMatchers("/oauth2/**").permitAll()
-        .antMatchers("/.well-known/jwks.json").permitAll()
-        .anyRequest().authenticated()
-        .and()
+      .authorizeRequests(requests -> {
+        requests.requestMatchers("/oauth2/**", "/.well-known/jwks.json").permitAll();
+      })
       .oauth2Login()
         .authorizationEndpoint()
           .baseUri("/oauth2/authorize")
@@ -64,40 +55,22 @@ public class SecurityConfig {
           .userService(customOAuth2UserService)
           .and()
         .successHandler(oauth2AuthenticationSuccessHandler)
-        .failureHandler(oAuth2AuthenticationFailureHandler);
-    
-    return httpSecurity.build();    
-  }
-
-  @Bean
-  @Order(2)
-  public SecurityFilterChain resourceServerFilterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
-      .cors().and()
-      .csrf().disable()
-      .requestMatchers()
-        .antMatchers("/user/**")
-        .antMatchers("/users/**")
-        .antMatchers("/groups/**")
-        .antMatchers("/roles/**")
-        .and()
-      .authorizeRequests()
-        .anyRequest().authenticated()
+        .failureHandler(oAuth2AuthenticationFailureHandler)
         .and()
       .oauth2ResourceServer()
-        .jwt();
+        .jwt()
+          .jwtAuthenticationConverter(jwtAuthenticationConverter());
 
     return httpSecurity.build();
   }
 
-  @Bean
-  public JwtAuthenticationConverter jwtAuthenticationConverter() {
-    var grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-    grantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
-    grantedAuthoritiesConverter.setAuthorityPrefix("");
+  private JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("authorities");
+    jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
-    var jwtAuthenticationConverter = new JwtAuthenticationConverter();
-    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
     return jwtAuthenticationConverter;
   }
 
