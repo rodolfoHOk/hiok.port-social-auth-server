@@ -3,6 +3,8 @@ package dev.hiok.portfoliosocialauthserver.core.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,35 +35,50 @@ public class SecurityConfig {
   private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
   @Bean
-  public SecurityFilterChain authServerFilterChain(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
+  @Order(Ordered.HIGHEST_PRECEDENCE)
+  public SecurityFilterChain authServerFilterChain(HttpSecurity http) throws Exception {
+    http
       .cors().and()
       .csrf().disable()
-      .exceptionHandling()
-        .authenticationEntryPoint(new RestAuthenticationEntryPoint())
-        .and()
-      .authorizeRequests(requests -> {
-        requests.requestMatchers("/oauth2/**", "/.well-known/jwks.json").permitAll();
-      })
-      .oauth2Login()
-        .authorizationEndpoint()
+      .exceptionHandling(exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint(new RestAuthenticationEntryPoint()))
+      .authorizeHttpRequests(requests -> requests
+        .requestMatchers("/oauth2/**", "/.well-known/jwks.json").permitAll()
+        .anyRequest().authenticated()
+      )
+      .oauth2Login(oauth2 -> oauth2
+        .authorizationEndpoint(authorization -> authorization
           .baseUri("/oauth2/authorize")
           .authorizationRequestRepository(customOAuth2AuthorizationRequestRepository)
-          .and()
-        .redirectionEndpoint()
+        )
+        .redirectionEndpoint(redirection -> redirection
           .baseUri("/oauth2/callback/*")
-          .and()
-        .userInfoEndpoint()
+        )
+        .userInfoEndpoint(userInfo -> userInfo
           .userService(customOAuth2UserService)
-          .and()
+        )
         .successHandler(oauth2AuthenticationSuccessHandler)
         .failureHandler(oAuth2AuthenticationFailureHandler)
-        .and()
-      .oauth2ResourceServer()
-        .jwt()
-          .jwtAuthenticationConverter(jwtAuthenticationConverter());
+      );
 
-    return httpSecurity.build();
+    return http.build();
+  }
+
+  @Bean
+  @Order
+  public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
+    http
+      .authorizeHttpRequests(requests -> requests
+        .requestMatchers("/user/**", "/users/**", "/groups/**", "/roles/**").authenticated()
+        .anyRequest().authenticated()
+      )
+      .oauth2ResourceServer(oauth2 -> oauth2
+        .jwt(jwt -> jwt
+          .jwtAuthenticationConverter(jwtAuthenticationConverter())
+        )
+      );
+
+    return http.build();
   }
 
   private JwtAuthenticationConverter jwtAuthenticationConverter() {

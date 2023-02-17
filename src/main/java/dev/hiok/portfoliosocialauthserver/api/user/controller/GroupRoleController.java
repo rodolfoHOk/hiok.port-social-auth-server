@@ -47,7 +47,7 @@ public class GroupRoleController {
 	@DeleteMapping("/{roleId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
-	public void desassociateGroupAndRole(@PathVariable Long groupId, @PathVariable Long roleId) {
+	public void disassociateGroupAndRole(@PathVariable Long groupId, @PathVariable Long roleId) {
 		groupRegistrationService.desassociateRole(groupId, roleId);
 	}
 	

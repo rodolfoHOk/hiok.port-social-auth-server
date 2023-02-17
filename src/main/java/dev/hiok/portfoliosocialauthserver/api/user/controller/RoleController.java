@@ -69,7 +69,7 @@ public class RoleController {
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
-	public void removeRole(@PathVariable Long id) {
+	public void deleteRole(@PathVariable Long id) {
 		roleRegistrationService.remove(id);
 	}
 	
