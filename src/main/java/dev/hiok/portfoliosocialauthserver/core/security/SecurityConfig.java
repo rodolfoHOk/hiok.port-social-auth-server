@@ -3,8 +3,6 @@ package dev.hiok.portfoliosocialauthserver.core.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,8 +33,7 @@ public class SecurityConfig {
   private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
   @Bean
-  @Order(Ordered.HIGHEST_PRECEDENCE)
-  public SecurityFilterChain authServerFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
       .cors().and()
       .csrf().disable()
@@ -44,6 +41,7 @@ public class SecurityConfig {
         .authenticationEntryPoint(new RestAuthenticationEntryPoint()))
       .authorizeHttpRequests(requests -> requests
         .requestMatchers("/oauth2/**", "/.well-known/jwks.json").permitAll()
+        .requestMatchers("/user/**", "/users/**", "/groups/**", "/roles/**").authenticated()
         .anyRequest().authenticated()
       )
       .oauth2Login(oauth2 -> oauth2
@@ -59,18 +57,6 @@ public class SecurityConfig {
         )
         .successHandler(oauth2AuthenticationSuccessHandler)
         .failureHandler(oAuth2AuthenticationFailureHandler)
-      );
-
-    return http.build();
-  }
-
-  @Bean
-  @Order
-  public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
-    http
-      .authorizeHttpRequests(requests -> requests
-        .requestMatchers("/user/**", "/users/**", "/groups/**", "/roles/**").authenticated()
-        .anyRequest().authenticated()
       )
       .oauth2ResourceServer(oauth2 -> oauth2
         .jwt(jwt -> jwt
