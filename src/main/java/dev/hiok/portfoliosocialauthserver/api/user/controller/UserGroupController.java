@@ -3,6 +3,7 @@ package dev.hiok.portfoliosocialauthserver.api.user.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,8 +32,8 @@ public class UserGroupController {
 	
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
-	public List<GroupResponse> getGroupsByUser(@PathVariable Long userId) {
-		User user = userRegistrationService.getById(userId);
+	public List<GroupResponse> getGroupsByUser(@PathVariable String userId) {
+		User user = userRegistrationService.getById(UUID.fromString(userId));
 		Set<Group> groups = user.getGroups();
 		return GroupResponseAssembler.toCollectionModel(new ArrayList<>(groups));
 	}
@@ -40,15 +41,15 @@ public class UserGroupController {
 	@PutMapping("/{groupId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
-	public void associateUserAndGroup(@PathVariable Long userId, @PathVariable Long groupId) {
-		userRegistrationService.associateGroup(userId, groupId);
+	public void associateUserAndGroup(@PathVariable String userId, @PathVariable Long groupId) {
+		userRegistrationService.associateGroup(UUID.fromString(userId), groupId);
 	}
 	
 	@DeleteMapping("/{groupId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_WRITE')")
-	public void disassociateUserAndGroup(@PathVariable Long userId, @PathVariable Long groupId) {
-		userRegistrationService.desassociateGroup(userId, groupId);
+	public void disassociateUserAndGroup(@PathVariable String userId, @PathVariable Long groupId) {
+		userRegistrationService.desassociateGroup(UUID.fromString(userId), groupId);
 	}
 	
 }

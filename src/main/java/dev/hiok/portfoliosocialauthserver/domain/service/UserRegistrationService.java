@@ -10,6 +10,8 @@ import dev.hiok.portfoliosocialauthserver.domain.model.User;
 import dev.hiok.portfoliosocialauthserver.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserRegistrationService {
@@ -17,7 +19,7 @@ public class UserRegistrationService {
 	private final UserRepository userRepository;
 	private final GroupRegistrationService groupRegistrationService;
 	
-	public User getById(Long id) {
+	public User getById(UUID id) {
 		return userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 	}
@@ -28,14 +30,14 @@ public class UserRegistrationService {
 	}
 	
 	@Transactional
-	public void associateGroup(Long userId, Long groupId) {
+	public void associateGroup(UUID userId, Long groupId) {
 		User user = getById(userId);
 		Group group = groupRegistrationService.getById(groupId);
 		user.addGroup(group);
 	}
 	
 	@Transactional
-	public void desassociateGroup(Long userId, Long groupId) {
+	public void desassociateGroup(UUID userId, Long groupId) {
 		User user = getById(userId);
 		Group group = groupRegistrationService.getById(groupId);
 		user.removeGroup(group);

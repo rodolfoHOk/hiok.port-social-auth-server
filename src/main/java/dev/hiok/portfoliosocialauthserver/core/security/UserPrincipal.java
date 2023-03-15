@@ -2,6 +2,7 @@ package dev.hiok.portfoliosocialauthserver.core.security;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -14,11 +15,11 @@ public class UserPrincipal implements OAuth2User {
 
   private Map<String, Object> attributes;
   private Collection<? extends GrantedAuthority> authorities;
-  private Long id;
+  private UUID id;
   private String email;
 
   private UserPrincipal(Map<String, Object> attributes,
-    Collection<? extends GrantedAuthority> authorities, Long id, String email) {
+    Collection<? extends GrantedAuthority> authorities, UUID id, String email) {
     this.attributes = attributes;
     this.authorities = authorities;
     this.id = id;

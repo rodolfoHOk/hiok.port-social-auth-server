@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +24,8 @@ import dev.hiok.portfoliosocialauthserver.domain.repository.UserRepository;
 import dev.hiok.portfoliosocialauthserver.domain.service.UserRegistrationService;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
@@ -38,8 +39,8 @@ public class UserController {
   public UserResponse getUserInfo(HttpServletRequest request) {
     String bearer = request.getHeader("Authorization");
     String token = bearer.substring(7);
-    Long userId = tokenProvider.getUserIdFromToken(token);
-    User user = userRegistrationService.getById(userId);
+    String userId = tokenProvider.getUserIdFromToken(token);
+    User user = userRegistrationService.getById(UUID.fromString(userId));
     return UserResponseAssembler.toModel(user);
   }
   
@@ -52,8 +53,8 @@ public class UserController {
   
   @GetMapping("/users/{id}")
   @PreAuthorize("hasAuthority('ROLE_ADMIN') and hasAuthority('SCOPE_READ')")
-  public UserDetailsResponse getUserById(@PathVariable Long id) {
-	  User user = userRegistrationService.getById(id);
+  public UserDetailsResponse getUserById(@PathVariable String id) {
+	  User user = userRegistrationService.getById(UUID.fromString(id));
 	  return UserDetailsResponseAssembler.toModel(user);
   }
   

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import dev.hiok.portfoliosocialauthserver.domain.model.SocialId;
+import dev.hiok.portfoliosocialauthserver.domain.repository.SocialIdRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +32,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private SocialIdRepository socialIdRepository;
+
   @Transactional
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -45,11 +50,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     User user;
     if (userOptional.isPresent()) {
       user = userOptional.get();
-      
-      if (!user.getProvider().equals(AuthProvider.valueOf(
-        userRequest.getClientRegistration().getRegistrationId()))) {
-          throw new OAuth2AuthenticationProcessingException(
-            "Please use your " + user.getProvider() + " account to login.");
+
+      if (!user.getSocialIds().stream().map(SocialId::getProvider).toList()
+        .contains(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()))) {
+          SocialId newSocialId = new SocialId();
+          newSocialId.setProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()));
+          newSocialId.setSocialId(oAuth2UserInfo.getId());
+          newSocialId.setUserId(user.getId());
+          socialIdRepository.save(newSocialId);
       }
 
       user = updateExistingUser(user, oAuth2UserInfo);
@@ -72,11 +80,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     user.setName(oAuth2UserInfo.getName());
     user.setEmail(oAuth2UserInfo.getEmail());
     user.setImageUrl(oAuth2UserInfo.getImageUrl());
-    user.setProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()));
-    user.setProviderId(oAuth2UserInfo.getId());
     user.addGroup(Group.getGroup(CommonsGroup.COMMON_USER));
 
-    return userRepository.save(user);
+    User savedUser = userRepository.save(user);
+
+    SocialId newSocialId = new SocialId();
+    newSocialId.setProvider(AuthProvider.valueOf(userRequest.getClientRegistration().getRegistrationId()));
+    newSocialId.setSocialId(oAuth2UserInfo.getId());
+    newSocialId.setUserId(savedUser.getId());
+    socialIdRepository.save(newSocialId);
+
+    return userRepository.getById(savedUser.getId());
   }
 
   private User updateExistingUser(User user, OAuth2UserInfo oAuth2UserInfo) {

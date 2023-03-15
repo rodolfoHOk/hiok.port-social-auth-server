@@ -1,8 +1,10 @@
 package dev.hiok.portfoliosocialauthserver.api.user.dto.response;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
-import dev.hiok.portfoliosocialauthserver.domain.model.AuthProvider;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +12,11 @@ import lombok.Setter;
 @Setter
 public class UserDetailsResponse {
 
-	private long id;
+	private UUID id;
 	private String name;
 	private String email;
 	private String imageUrl;
-	private AuthProvider provider;
+	private List<SocialIdResponse> socialIds = new ArrayList<>();
 	private Set<GroupNameResponse> groups;
 	
 }

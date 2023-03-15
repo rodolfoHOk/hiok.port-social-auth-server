@@ -49,7 +49,7 @@ public class TokenProvider {
         .map(authority -> authority.getAuthority()).collect(Collectors.toList());
       
       JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-        .subject(Long.toString(userPrincipal.getId()))
+        .subject(userPrincipal.getId().toString())
         .claim("authorities", authorities)
         .issueTime(now)
         .expirationTime(expirationDate)
@@ -68,12 +68,12 @@ public class TokenProvider {
     }
   }
 
-  public Long getUserIdFromToken(String token) {
+  public String getUserIdFromToken(String token) {
     try {
       SignedJWT signedJWT = SignedJWT.parse(token);
       JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
       
-      return Long.parseLong(jwtClaimsSet.getSubject());
+      return jwtClaimsSet.getSubject();
     } catch (ParseException e) {
 
       throw new TokenProcessingException("Get user id from token error: " + e.getMessage());
